@@ -1,12 +1,15 @@
 .useNode{
-    color:black;
+    color: black;
     width: 100%;
-    height: 34px;
+    height: 35px;
     z-index: 20000;
     font-size: 19px;
     text-align: center;
     margin: 10px;
     top: 70px;
+    padding-top: 8px;
+    background-color: #89a6ff;
+    border: 2px solid #2a2aad;
 }
 
 .AChotkey{
@@ -15,8 +18,11 @@
 
 
 div.jlcpcba-stock{
-    background:black;
-    color:white;
+    color: white;
+    background: #2b780c;
+    padding: 5px;
+    border: 1px solid black;
+    margin-bottom: 5px;
 }
 div.jlcpcba-stock.loading{
     background: #0b59d6;
@@ -38,3 +44,41 @@ div.jlcpcba-stock.lowStock{
     background: #785c10;
 }
 
+div.firstRow{
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+}
+
+div.firstRowLeft{
+    font-size: 15px;
+    font-weight: bold;
+}
+
+div.secondRow{
+    margin-top: 4px;
+    border-top: solid 1px black;
+    padding-top: 4px;
+}
+
+div.partType{
+    border: 1px solid white;
+    padding: 1px 4px;
+    color: white;
+    font-weight: bolder;
+}
+
+div.partType.basic{
+    background-color: #bc9e00;
+}
+
+div.partType.extended{
+    background-color: #a90000;
+}
+
+span.priceAmount{
+    font-weight: bold;
+}

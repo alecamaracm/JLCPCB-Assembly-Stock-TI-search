@@ -42,8 +42,19 @@ function StartStock(){
         newDiv.classList.add("jlcpcba-stock");
         newDiv.classList.add("loading");
         partDOM.firstElementChild.firstElementChild.insertBefore(newDiv,partDOM.firstElementChild.firstElementChild.firstElementChild);
-        let newContent = document.createTextNode("Loading "+partNumber+"...");
-        newDiv.appendChild(newContent);
+
+        let firstRow = document.createElement("div");
+        firstRow.classList.add("firstRow");
+        newDiv.appendChild(firstRow);
+
+        let firstRowLeft = document.createElement("div");
+        firstRowLeft.classList.add("firstRowLeft");
+        firstRow.appendChild(firstRowLeft);
+
+        let newContent = document.createTextNode("JLCPCBA: ");
+        firstRowLeft.appendChild(newContent);
+        newContent = document.createTextNode("Loading "+partNumber+"...");
+        firstRowLeft.appendChild(newContent);
 
         //console.log("Finding stock of "+partNumber);
 
@@ -71,6 +82,8 @@ function StartStock(){
                 newDiv.classList.remove("loading");
                 
                 if(res.data.componentPageInfo.list.length>0){
+
+                
     
                     const maxStockElement = res.data.componentPageInfo.list.reduce(function(prev, current) {
                         return (prev.stockCount > current.stockCount) ? prev : current
@@ -79,18 +92,53 @@ function StartStock(){
                                     
                     if(maxStockElement.stockCount>0)
                     {
-                        newContent.textContent="Stock: "+maxStockElement.stockCount;
-    
-                        const maxPrice = maxStockElement.componentPrices.reduce(function(prev, current) {
-                            return (prev.productPrice > current.productPrice) ? prev : current
-                        }) //returns object
-                        newContent.textContent+=" Price: "+maxPrice.productPrice;
-    
-                        if(maxStockElement.stockCount>10){
+                        let secondRow = document.createElement("div");
+                        secondRow.classList.add("secondRow");
+                        newDiv.appendChild(secondRow);
+
+                        newContent.textContent="In stock";
+                        
+                        if(maxStockElement.stockCount>100){
                             newDiv.classList.add("stock");
                         }else{
                             newDiv.classList.add("lowStock");
-                        }                    
+                        }    
+
+
+                        let stockDiv=document.createElement("div");
+                        stockDiv.innerHTML="Stock: "+maxStockElement.stockCount;
+                        firstRow.appendChild(stockDiv);
+
+                        let partTypeDiv = document.createElement("div");
+                        partTypeDiv.classList.add("partType");
+
+                        const basicPart = res.data.componentPageInfo.list.reduce(function(prev, current) {
+                            return (current.componentLibraryType=="base") ? current : prev
+                        }) //returns object                        
+                        if(basicPart.componentLibraryType=="expand"){
+                            partTypeDiv.classList.add("extended");
+                            partTypeDiv.innerText="E";
+                        }else{
+                            partTypeDiv.classList.add("basic");
+                            partTypeDiv.innerText="B";
+                        }                        
+                        firstRow.appendChild(partTypeDiv);
+
+    
+                        
+                        const ordered = maxStockElement.componentPrices.sort(function(prev,next){
+                            return prev.startNumber>next.startNumber;
+                        });
+                        ordered.forEach((priceItem)=>{
+                            if(secondRow.children.length>=3) return;
+                            let priceDiv=document.createElement("div");
+                            priceDiv.innerHTML="<span class='priceAmount'>+"+priceItem.startNumber+"</span> - "+priceItem.productPrice+"$";
+                            secondRow.appendChild(priceDiv);
+                        });
+
+                      
+
+                
                     }
                     else
                     {
